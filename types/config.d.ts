@@ -7,3 +7,10 @@ export interface UserConfig {
   // Avoiding duplicates requires recalculating file hashes, and large images may consume a significant amount of time.
   uniqueImageSizeLimit?: string
 }
+
+export interface FormattedUserConfig extends UserConfig {
+  // url always ends with /
+  albumId: string
+  uniqueImage: boolean
+  uniqueImageSizeLimit: number
+}

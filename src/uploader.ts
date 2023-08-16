@@ -1,20 +1,30 @@
 import crypto from 'crypto'
 import FormData from 'form-data'
 import { CONFIG_KEY, DEFAULT_ALBUM_NAME, IMAGE_HASH_TYPE } from './constants'
+import { formatUserConfig } from './config'
 import type { IPicGo, IReqOptionsWithBodyResOnly, IImgInfo } from 'picgo'
-import type { UserConfig } from 'types/config'
+import type { FormattedUserConfig } from 'types/config'
 import type { Photo, Album } from 'types/lychee'
+import type { LocaleKey } from 'types/locale'
 
 class UploaderUtils {
-  public userConfig: UserConfig
+  public userConfig: FormattedUserConfig
 
   private ctx: IPicGo
 
   constructor(ctx: IPicGo) {
     this.ctx = ctx
 
-    // TODO need format user config
-    this.userConfig = ctx.getConfig(CONFIG_KEY)
+    this.userConfig = formatUserConfig(ctx, ctx.getConfig(CONFIG_KEY))
+
+    ctx.log.info(
+      ctx.i18n.translate<LocaleKey>('UPLOADER_CONFIG_FORMATTER_RESULT_LOG', {
+        config: JSON.stringify({
+          ...this.userConfig,
+          token: `<length ${this.userConfig.token.length}>`,
+        }),
+      })
+    )
   }
 
   public setOutput(imageInfo: IImgInfo, url?: string | null): void {

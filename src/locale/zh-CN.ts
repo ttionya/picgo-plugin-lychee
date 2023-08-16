@@ -9,4 +9,7 @@ export const zhCN: Locale = {
 
   UPLOADER_CONFIG_URL_VALIDATE_EMPTY: 'Lychee 网页地址不能为空',
   UPLOADER_CONFIG_TOKEN_VALIDATE_EMPTY: 'Lychee API Token 不能为空',
+
+  UPLOADER_CONFIG_FORMATTER_INVALID: '插件配置不合法 (${configName})，请检查配置文件。',
+  UPLOADER_CONFIG_FORMATTER_RESULT_LOG: '格式化后的配置：`${config}`',
 }

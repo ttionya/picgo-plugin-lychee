@@ -1,15 +1,23 @@
-import { CONFIG_KEY, DEFAULT_ALBUM_NAME } from './constants'
+import humanFormat from 'human-format'
+import {
+  CONFIG_KEY,
+  DEFAULT_ALBUM_NAME,
+  DEFAULT_UNIQUE_IMAGE,
+  DEFAULT_UNIQUE_IMAGE_SIZE_LIMIT,
+} from './constants'
 import type { IPicGo, IPluginConfig } from 'picgo'
-import type { UserConfig } from 'types/config'
+import type { UserConfig, FormattedUserConfig } from 'types/config'
 import type { LocaleKey } from 'types/locale'
 
-export const config = (ctx: IPicGo): IPluginConfig[] => {
+const binaryScale = humanFormat.Scale.create(['', 'K', 'M', 'G', 'T'], 1024)
+
+export function config(ctx: IPicGo): IPluginConfig[] {
   const defaultUserConfig: UserConfig = {
     url: '',
     token: '',
     albumId: DEFAULT_ALBUM_NAME,
-    uniqueImage: false,
-    uniqueImageSizeLimit: '100m',
+    uniqueImage: DEFAULT_UNIQUE_IMAGE,
+    uniqueImageSizeLimit: DEFAULT_UNIQUE_IMAGE_SIZE_LIMIT,
   }
   const userConfig: UserConfig = {
     ...defaultUserConfig,
@@ -76,4 +84,48 @@ export const config = (ctx: IPicGo): IPluginConfig[] => {
       when: (answer: any) => answer.uniqueImage,
     },
   ]
+}
+
+export function formatUserConfig(ctx: IPicGo, userConfig: UserConfig): FormattedUserConfig {
+  // check url and token is not empty
+  for (const configName of ['url', 'token'] as const) {
+    if (!userConfig[configName]) {
+      const errorMessage = ctx.i18n.translate<LocaleKey>('UPLOADER_CONFIG_FORMATTER_INVALID', {
+        configName,
+      })
+
+      ctx.log.error(errorMessage)
+
+      throw new Error(errorMessage)
+    }
+  }
+
+  const uniqueImage = !!userConfig.uniqueImage
+  let uniqueImageSizeLimit = 0
+
+  if (uniqueImage) {
+    try {
+      // parse human readable size
+      uniqueImageSizeLimit = humanFormat.parse(
+        (userConfig.uniqueImageSizeLimit || DEFAULT_UNIQUE_IMAGE_SIZE_LIMIT).toUpperCase(),
+        { scale: binaryScale }
+      )
+    } catch (err) {
+      const errorMessage = ctx.i18n.translate<LocaleKey>('UPLOADER_CONFIG_FORMATTER_INVALID', {
+        configName: 'uniqueImageSizeLimit',
+      })
+
+      ctx.log.error(errorMessage)
+
+      throw new Error(errorMessage)
+    }
+  }
+
+  return {
+    url: `${userConfig.url.replace(/\/*$/, '')}/`,
+    token: userConfig.token,
+    albumId: userConfig.albumId || DEFAULT_ALBUM_NAME,
+    uniqueImage,
+    uniqueImageSizeLimit,
+  }
 }
