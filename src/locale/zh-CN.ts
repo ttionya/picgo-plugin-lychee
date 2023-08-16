@@ -12,4 +12,6 @@ export const zhCN: Locale = {
 
   UPLOADER_CONFIG_FORMATTER_INVALID: '插件配置不合法 (${configName})，请检查配置文件。',
   UPLOADER_CONFIG_FORMATTER_RESULT_LOG: '格式化后的配置：`${config}`',
+
+  UPLOADER_NO_INPUT: '缺少输入文件',
 }

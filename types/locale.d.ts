@@ -13,6 +13,9 @@ export interface Locale {
   // uploader config formatter
   UPLOADER_CONFIG_FORMATTER_INVALID: string
   UPLOADER_CONFIG_FORMATTER_RESULT_LOG: string
+
+  // uploader
+  UPLOADER_NO_INPUT: string
 }
 
 export type LocaleKey = keyof Locale

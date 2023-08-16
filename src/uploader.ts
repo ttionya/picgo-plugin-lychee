@@ -101,10 +101,12 @@ export async function uploader(ctx: IPicGo): Promise<void> {
   const outputs = ctx.output
 
   if (!outputs.length) {
-    throw new Error('no input')
-  }
+    const errorMessage = ctx.i18n.translate<LocaleKey>('UPLOADER_NO_INPUT')
 
-  // console.log(uploaderUtils.userConfig)
+    ctx.log.error(errorMessage)
+
+    throw new Error(errorMessage)
+  }
 
   try {
     // TODO cache album photos list and check outputs has same image

@@ -14,4 +14,6 @@ export const en: Locale = {
   UPLOADER_CONFIG_FORMATTER_INVALID:
     'Plugin configuration is invalid (${configName}), please check the configuration file.',
   UPLOADER_CONFIG_FORMATTER_RESULT_LOG: 'Formatted config: `${config}`',
+
+  UPLOADER_NO_INPUT: 'Missing input file',
 }
