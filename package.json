@@ -1,6 +1,6 @@
 {
   "name": "picgo-plugin-lychee",
-  "version": "1.0.0-beta.0",
+  "version": "0.0.0-beta.0",
   "description": "",
   "keywords": [
     "picgo",
@@ -22,8 +22,10 @@
   "main": "./lib/index.js",
   "scripts": {
     "bootstrap": "pnpm install",
+    "build": "tsc",
     "preinstall": "npx only-allow pnpm",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "prepublishOnly": "pnpm run build"
   },
   "devDependencies": {
     "@ttionya/eslint-config": "^2.5.0",
