@@ -1,0 +1,9 @@
+{
+  "extends": "@ttionya/tsconfig/tsconfig.commonjs.json",
+
+  "compilerOptions": {
+    "outDir": "lib"
+  },
+
+  "include": ["src/**/*"]
+}

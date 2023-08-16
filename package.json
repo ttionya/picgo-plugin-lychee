@@ -1,0 +1,43 @@
+{
+  "name": "picgo-plugin-lychee",
+  "version": "1.0.0-beta.0",
+  "description": "",
+  "keywords": [
+    "picgo",
+    "picgo-gui-plugin",
+    "picgo-plugin",
+    "picgo-plugin-lychee",
+    "lychee"
+  ],
+  "author": "ttionya <git@ttionya.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/ttionya/picgo-plugin-lychee",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ttionya/picgo-plugin-lychee.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ttionya/picgo-plugin-lychee/issues"
+  },
+  "main": "./lib/index.js",
+  "scripts": {
+    "bootstrap": "pnpm install",
+    "preinstall": "npx only-allow pnpm",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@ttionya/eslint-config": "^2.5.0",
+    "@ttionya/prettier-config": "^1.2.0",
+    "@ttionya/tsconfig": "^2.0.1",
+    "@types/node": "^20.5.0",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "@typescript-eslint/parser": "^6.4.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.0",
+    "picgo": "^1.5.4",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "form-data": "^4.0.0"
+  }
+}
