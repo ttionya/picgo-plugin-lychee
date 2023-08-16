@@ -2,8 +2,15 @@
   "extends": "@ttionya/tsconfig/tsconfig.commonjs.json",
 
   "compilerOptions": {
-    "outDir": "lib"
+    "outDir": "lib",
+
+    "baseUrl": ".",
+    "paths": {
+      "types/*": ["types/*"]
+    },
+
+    "skipLibCheck": true
   },
 
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "types/**/*"]
 }
