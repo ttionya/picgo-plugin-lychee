@@ -20,6 +20,9 @@
     "url": "https://github.com/ttionya/picgo-plugin-lychee/issues"
   },
   "main": "./lib/index.js",
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "bootstrap": "pnpm install",
     "build": "tsc",
