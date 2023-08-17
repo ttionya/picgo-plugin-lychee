@@ -1,16 +1,20 @@
+/* eslint-disable @typescript-eslint/member-ordering */
+
 import crypto from 'crypto'
 import FormData from 'form-data'
-import { CONFIG_KEY, DEFAULT_ALBUM_NAME, IMAGE_HASH_TYPE } from './constants'
+import { CONFIG_KEY, IMAGE_HASH_TYPE } from './constants'
 import { formatUserConfig } from './config'
 import type { IPicGo, IReqOptionsWithBodyResOnly, IImgInfo } from 'picgo'
 import type { FormattedUserConfig } from 'types/config'
-import type { Photo, Album } from 'types/lychee'
+import type { SizeVariantResource, Photo, Album } from 'types/lychee'
 import type { LocaleKey } from 'types/locale'
 
 class UploaderUtils {
   public userConfig: FormattedUserConfig
 
   private ctx: IPicGo
+
+  private imageHashMap = new Map<string, { url?: SizeVariantResource['url'] }>()
 
   constructor(ctx: IPicGo) {
     this.ctx = ctx
@@ -27,31 +31,101 @@ class UploaderUtils {
     )
   }
 
-  public setOutput(imageInfo: IImgInfo, url?: string | null): void {
-    if (!url) return
-
-    const fullUrl = this.userConfig.url + '/' + url
-
-    imageInfo.imgUrl = fullUrl
-    imageInfo['url'] = fullUrl
+  /**
+   * create normal tasks
+   */
+  public async createNormalTasks(outputs: IImgInfo[]): Promise<void> {
+    await Promise.all(outputs.map((imageInfo) => this.createNormalTask(imageInfo)))
   }
 
-  public getImageHash(imageInfo: IImgInfo): string {
-    if (!imageInfo.buffer) {
-      // TODO log pass calculate hash
-      this.ctx.log.warn('')
+  private async createNormalTask(imageInfo: IImgInfo): Promise<void> {
+    const uploadedPhotoData = await this.uploadPhoto(imageInfo, this.userConfig.albumId)
 
+    // TODO
+    console.log('uploadedPhotoData', uploadedPhotoData)
+
+    // only new images will return image information
+    if (uploadedPhotoData.size_variants.original?.url) {
+      return this.setImageInfo(imageInfo, uploadedPhotoData.size_variants.original?.url)
+    }
+
+    // get photo data by photoId
+    const photoData = await this.getPhotoById(uploadedPhotoData.id)
+
+    return this.setImageInfo(imageInfo, photoData.size_variants.original?.url)
+  }
+
+  /**
+   * create unique tasks
+   */
+  public async createUniqueTasks(outputs: IImgInfo[]): Promise<void> {
+    await this.preUniqueTask(outputs)
+
+    await Promise.all(outputs.map((imageInfo) => this.createUniqueTask(imageInfo)))
+
+    await this.postUniqueTask(outputs)
+  }
+
+  private async preUniqueTask(outputs: IImgInfo[]): Promise<void> {
+    const albumData = await this.getAlbumById(this.userConfig.albumId)
+
+    albumData.photos.forEach((photo) => {
+      this.imageHashMap.set(photo.original_checksum, { url: photo.size_variants.original?.url })
+    })
+
+    outputs.forEach((imageInfo) => {
+      imageInfo['checksum'] = this.getImageHash(imageInfo)
+    })
+  }
+
+  private async createUniqueTask(imageInfo: IImgInfo): Promise<void> {
+    const imageHash: string = imageInfo['checksum']
+    const tmpImgUrl: { url?: SizeVariantResource['url'] } = { url: null }
+
+    if (imageHash) {
+      if (this.imageHashMap.has(imageHash)) {
+        imageInfo['tmpImgUrl'] = this.imageHashMap.get(imageHash)
+
+        return
+      }
+
+      this.imageHashMap.set(imageHash, (imageInfo['tmpImgUrl'] = tmpImgUrl))
+    }
+
+    await this.createNormalTask(imageInfo)
+
+    tmpImgUrl.url = imageInfo['imgUrl']?.slice(this.userConfig.url.length + 1)
+  }
+
+  private async postUniqueTask(outputs: IImgInfo[]): Promise<void> {
+    // TODO
+    console.log(outputs)
+
+    outputs.forEach((imageInfo) => this.setImageInfo(imageInfo, imageInfo['tmpImgUrl'].url))
+  }
+
+  private getImageHash(imageInfo: IImgInfo): string {
+    const size = imageInfo.buffer!.byteLength
+
+    // if the image size exceeds the limit, the hash won't be computed
+    if (size > this.userConfig.uniqueImageSizeLimit) {
       return ''
     }
 
-    // TODO need use uniqueImageSizeLimit
-    return crypto.createHash(IMAGE_HASH_TYPE).update(imageInfo.buffer).digest('hex').toLowerCase()
+    return crypto.createHash(IMAGE_HASH_TYPE).update(imageInfo.buffer!).digest('hex').toLowerCase()
   }
 
-  public async uploadPhoto(imageInfo: IImgInfo, albumId?: string): Promise<Photo> {
+  private setImageInfo(imageInfo: IImgInfo, imageUrl?: SizeVariantResource['url']): void {
+    const url = imageUrl ? `${this.userConfig.url}/${imageUrl}` : ''
+
+    imageInfo['imgUrl'] = url
+    imageInfo['url'] = url
+  }
+
+  private async uploadPhoto(imageInfo: IImgInfo, albumId: string): Promise<Photo> {
     const formData = new FormData()
 
-    formData.append('albumID', albumId || DEFAULT_ALBUM_NAME)
+    formData.append('albumID', albumId)
     formData.append('file', imageInfo.buffer, imageInfo.fileName)
 
     // TODO log upload filename size to album
@@ -64,7 +138,7 @@ class UploaderUtils {
     })
   }
 
-  public async getPhotoById(photoId: string): Promise<Photo> {
+  private async getPhotoById(photoId: string): Promise<Photo> {
     return this.ctx.request({
       ...this.globalRequestConfig,
       url: 'Photo::get',
@@ -74,19 +148,19 @@ class UploaderUtils {
     })
   }
 
-  public async getAlbumById(albumId?: string): Promise<Album> {
+  private async getAlbumById(albumId: string): Promise<Album> {
     return this.ctx.request({
       ...this.globalRequestConfig,
       url: 'Album::get',
       data: {
-        albumID: albumId || DEFAULT_ALBUM_NAME,
+        albumID: albumId,
       },
     })
   }
 
   private get globalRequestConfig(): IReqOptionsWithBodyResOnly {
     return {
-      baseURL: `${this.userConfig.url.replace(/\/*$/, '')}/api/`,
+      baseURL: `${this.userConfig.url}/api/`,
       headers: {
         Authorization: this.userConfig.token,
       },
@@ -108,45 +182,14 @@ export async function uploader(ctx: IPicGo): Promise<void> {
     throw new Error(errorMessage)
   }
 
+  // TODO buffer should not empty
+
   try {
-    // TODO cache album photos list and check outputs has same image
-    // unique
-    // if (uploaderUtils.userConfig.uniqueImage) {
-    //   const hash = uploaderUtils.getImageHash(imageInfo)
-    //
-    //   // only
-    //   if (hash) {
-    //     const albumData = await uploaderUtils.getAlbumById(uploaderUtils.userConfig.albumId)
-    //     const findExistedImage = albumData.photos.find((photo) => photo.original_checksum === hash)
-    //
-    //     console.log(albumData)
-    //
-    //     if (findExistedImage) {
-    //       return uploaderUtils.setOutput(findExistedImage.size_variants.original?.url)
-    //     }
-    //   }
-    // }
-
-    await Promise.all(
-      outputs.map(async (imageInfo) => {
-        // upload
-        const uploadedPhotoData = await uploaderUtils.uploadPhoto(
-          imageInfo,
-          uploaderUtils.userConfig.albumId
-        )
-
-        console.log(uploadedPhotoData)
-
-        if (uploadedPhotoData.size_variants.original?.url) {
-          return uploaderUtils.setOutput(imageInfo, uploadedPhotoData.size_variants.original?.url)
-        }
-
-        // get photo data by photoId
-        const photoData = await uploaderUtils.getPhotoById(uploadedPhotoData.id)
-
-        return uploaderUtils.setOutput(imageInfo, photoData.size_variants.original?.url)
-      })
-    )
+    if (!uploaderUtils.userConfig.uniqueImage) {
+      await uploaderUtils.createNormalTasks(outputs)
+    } else {
+      await uploaderUtils.createUniqueTasks(outputs)
+    }
   } catch (err: unknown) {
     // TODO
     ctx.log.error('error')

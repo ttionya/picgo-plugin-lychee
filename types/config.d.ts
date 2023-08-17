@@ -9,7 +9,7 @@ export interface UserConfig {
 }
 
 export interface FormattedUserConfig extends UserConfig {
-  // url always ends with /
+  // url always ends without '/'
   albumId: string
   uniqueImage: boolean
   uniqueImageSizeLimit: number

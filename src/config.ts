@@ -122,7 +122,7 @@ export function formatUserConfig(ctx: IPicGo, userConfig: UserConfig): Formatted
   }
 
   return {
-    url: `${userConfig.url.replace(/\/*$/, '')}/`,
+    url: userConfig.url.replace(/\/*$/, ''),
     token: userConfig.token,
     albumId: userConfig.albumId || DEFAULT_ALBUM_NAME,
     uniqueImage,
