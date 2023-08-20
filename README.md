@@ -8,14 +8,16 @@
 
 ## Install
 
-- for GUI: search `lychee`
+- for GUI: search `lychee` and install
 - for Core: run `picgo add lychee`
 
 <br>
 
 ## Configuration
 
-`picgo set uploader lychee`
+For Core user, you can run `picgo set uploader lychee` to enter interactive configuration.
+
+For GUI user, you can configure in `Picbeds Settings`.
 
 ### `url`
 

@@ -8,14 +8,16 @@
 
 ## 安装
 
-- 对于 GUI: 搜索 `lychee`
+- 对于 GUI: 搜索 `lychee` 并安装
 - 对于 Core: 运行 `picgo add lychee`
 
 <br>
 
 ## 配置
 
-`picgo set uploader lychee`
+对于 Core 用户，你可以运行 `picgo set uploader lychee` 进入交互式配置。
+
+对于 GUI 用户，你可以在“图床设置”中进行配置。
 
 ### `url`
 
