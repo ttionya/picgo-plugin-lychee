@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/member-ordering */
 
+import { Buffer } from 'buffer'
 import crypto from 'crypto'
 import FormData from 'form-data'
 import { CONFIG_KEY, IMAGE_HASH_TYPE } from './constants'
@@ -40,9 +41,6 @@ class UploaderUtils {
 
   private async createNormalTask(imageInfo: IImgInfo): Promise<void> {
     const uploadedPhotoData = await this.uploadPhoto(imageInfo, this.userConfig.albumId)
-
-    // TODO
-    console.log('uploadedPhotoData', uploadedPhotoData)
 
     // only new images will return image information
     if (uploadedPhotoData.size_variants.original?.url) {
@@ -86,6 +84,12 @@ class UploaderUtils {
       if (this.imageHashMap.has(imageHash)) {
         imageInfo['tmpImgUrl'] = this.imageHashMap.get(imageHash)
 
+        this.ctx.log.info(
+          this.ctx.i18n.translate<LocaleKey>('UPLOADER_UPLOAD_UNIQUE_LOG', {
+            filename: imageInfo.fileName || '',
+          })
+        )
+
         return
       }
 
@@ -98,9 +102,6 @@ class UploaderUtils {
   }
 
   private async postUniqueTask(outputs: IImgInfo[]): Promise<void> {
-    // TODO
-    console.log(outputs)
-
     outputs.forEach((imageInfo) => this.setImageInfo(imageInfo, imageInfo['tmpImgUrl'].url))
   }
 
@@ -128,8 +129,14 @@ class UploaderUtils {
     formData.append('albumID', albumId)
     formData.append('file', imageInfo.buffer, imageInfo.fileName)
 
-    // TODO log upload filename size to album
-    // this.ctx.log.info()
+    this.ctx.log.info(
+      this.ctx.i18n.translate<LocaleKey>('UPLOADER_UPLOAD_IMAGE_LOG', {
+        filename: imageInfo.fileName || '',
+        checksum: imageInfo['checksum'] || 'empty',
+        size: `${imageInfo.buffer!.byteLength}`,
+        albumId,
+      })
+    )
 
     return this.ctx.request({
       ...this.globalRequestConfig,
@@ -172,7 +179,24 @@ class UploaderUtils {
 
 export async function uploader(ctx: IPicGo): Promise<void> {
   const uploaderUtils = new UploaderUtils(ctx)
-  const outputs = ctx.output
+  const outputs = ctx.output.filter((imageInfo) => {
+    // if only base64 is available without a buffer, then convert the base64 to a buffer
+    if (!imageInfo.buffer?.byteLength && imageInfo.base64Image) {
+      imageInfo.buffer = Buffer.from(imageInfo.base64Image, 'base64')
+    }
+
+    const valid = !!imageInfo.buffer?.byteLength
+
+    if (!valid) {
+      ctx.log.warn(
+        ctx.i18n.translate<LocaleKey>('UPLOADER_INVALID_INPUT', {
+          filename: imageInfo.fileName || '',
+        })
+      )
+    }
+
+    return valid
+  })
 
   if (!outputs.length) {
     const errorMessage = ctx.i18n.translate<LocaleKey>('UPLOADER_NO_INPUT')
@@ -182,21 +206,28 @@ export async function uploader(ctx: IPicGo): Promise<void> {
     throw new Error(errorMessage)
   }
 
-  // TODO buffer should not empty
-
   try {
     if (!uploaderUtils.userConfig.uniqueImage) {
       await uploaderUtils.createNormalTasks(outputs)
     } else {
       await uploaderUtils.createUniqueTasks(outputs)
     }
+
+    outputs.forEach((imageInfo) => {
+      ctx.log.info(
+        ctx.i18n.translate<LocaleKey>('UPLOADER_UPLOAD_RESULT_LOG', {
+          filename: imageInfo.fileName || '',
+          url: imageInfo.imgUrl || '',
+        })
+      )
+    })
   } catch (err: unknown) {
-    // TODO
-    ctx.log.error('error')
+    ctx.log.error(ctx.i18n.translate<LocaleKey>('UPLOADER_FAILED'))
     ctx.log.error(err as Error)
+
     ctx.emit('notification', {
-      title: 'upload failed',
-      body: 'Please check the log',
+      title: ctx.i18n.translate<LocaleKey>('UPLOADER_FAILED_TITLE_NOTIFY'),
+      body: ctx.i18n.translate<LocaleKey>('UPLOADER_FAILED_BODY_NOTIFY'),
       text: '',
     })
 

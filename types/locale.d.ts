@@ -7,8 +7,8 @@ export interface Locale {
   UPLOADER_CONFIG_UNIQUE_IMAGE_SIZE_LIMIT: string
 
   // uploader config validate
-  UPLOADER_CONFIG_URL_VALIDATE_EMPTY: string
-  UPLOADER_CONFIG_TOKEN_VALIDATE_EMPTY: string
+  UPLOADER_CONFIG_VALIDATE_URL_EMPTY: string
+  UPLOADER_CONFIG_VALIDATE_TOKEN_EMPTY: string
 
   // uploader config formatter
   UPLOADER_CONFIG_FORMATTER_INVALID: string
@@ -16,6 +16,13 @@ export interface Locale {
 
   // uploader
   UPLOADER_NO_INPUT: string
+  UPLOADER_INVALID_INPUT: string
+  UPLOADER_FAILED: string
+  UPLOADER_FAILED_TITLE_NOTIFY: string
+  UPLOADER_FAILED_BODY_NOTIFY: string
+  UPLOADER_UPLOAD_IMAGE_LOG: string
+  UPLOADER_UPLOAD_UNIQUE_LOG: string
+  UPLOADER_UPLOAD_RESULT_LOG: string
 }
 
 export type LocaleKey = keyof Locale

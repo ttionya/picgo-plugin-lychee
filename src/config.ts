@@ -35,7 +35,7 @@ export function config(ctx: IPicGo): IPluginConfig[] {
       },
       validate: (input: string): string | true => {
         if (input.trim() === '') {
-          return ctx.i18n.translate<LocaleKey>('UPLOADER_CONFIG_URL_VALIDATE_EMPTY')
+          return ctx.i18n.translate<LocaleKey>('UPLOADER_CONFIG_VALIDATE_URL_EMPTY')
         }
         return true
       },
@@ -50,7 +50,7 @@ export function config(ctx: IPicGo): IPluginConfig[] {
       },
       validate: (input: string): string | true => {
         if (input.trim() === '') {
-          return ctx.i18n.translate<LocaleKey>('UPLOADER_CONFIG_TOKEN_VALIDATE_EMPTY')
+          return ctx.i18n.translate<LocaleKey>('UPLOADER_CONFIG_VALIDATE_TOKEN_EMPTY')
         }
         return true
       },
