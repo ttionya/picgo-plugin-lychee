@@ -21,7 +21,8 @@
   },
   "main": "./lib/index.js",
   "files": [
-    "lib"
+    "lib",
+    "logo.png"
   ],
   "scripts": {
     "bootstrap": "pnpm install",
