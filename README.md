@@ -31,7 +31,7 @@ Lychee API token.
 
 You can generate an API Token from the settings.
 
-![](assets/20230820144556.png)
+![](https://raw.githubusercontent.com/ttionya/picgo-plugin-lychee/master/assets/20230820144556.png)
 
 ### `albumId`
 
@@ -42,7 +42,7 @@ Album ID, you can only use regular `Album`, **not** `Tag Album`.
 
 After entering the album, you can find the album ID in the URL.
 
-![](assets/20230820145149.png)
+![](https://raw.githubusercontent.com/ttionya/picgo-plugin-lychee/master/assets/20230820145149.png)
 
 ### `uniqueImage`
 

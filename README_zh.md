@@ -31,18 +31,18 @@ Lychee API token.
 
 你可以在设置中生成 API Token。
 
-![](assets/20230820144556.png)
+![](https://raw.githubusercontent.com/ttionya/picgo-plugin-lychee/master/assets/20230820144556.png)
 
 ### `albumId`
 
 - Default: `unsorted`
 - Example: `mTmo_j9SVEie3ETcCMY3YruI`
 
-Album ID, you can only use regular `Album`, **not** `Tag Album`.
+相册的编号，你只能使用**普通相册**，**不能**是**标签相册**。
 
-After entering the album, you can find the album ID in the URL.
+进入相册后，你可以在 url 上找到相册编号。
 
-![](assets/20230820145149.png)
+![](https://raw.githubusercontent.com/ttionya/picgo-plugin-lychee/master/assets/20230820145149.png)
 
 ### `uniqueImage`
 
