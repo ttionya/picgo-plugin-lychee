@@ -1,3 +1,4 @@
+export const PLUGIN_DISPLAY = 'Lychee'
 export const PLUGIN_NAME = 'lychee'
 
 export const CONFIG_KEY = `picBed.${PLUGIN_NAME}`

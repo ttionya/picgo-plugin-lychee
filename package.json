@@ -1,7 +1,7 @@
 {
   "name": "picgo-plugin-lychee",
   "version": "1.0.0-beta.0",
-  "description": "",
+  "description": "PicGo uploader for Lychee",
   "keywords": [
     "picgo",
     "picgo-gui-plugin",
@@ -9,7 +9,7 @@
     "picgo-plugin-lychee",
     "lychee"
   ],
-  "author": "ttionya <git@ttionya.com>",
+  "author": "ttionya",
   "license": "MIT",
   "homepage": "https://github.com/ttionya/picgo-plugin-lychee",
   "repository": {

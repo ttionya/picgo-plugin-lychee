@@ -12,6 +12,7 @@ import type { LocaleKey } from 'types/locale'
 const binaryScale = humanFormat.Scale.create(['', 'K', 'M', 'G', 'T'], 1024)
 
 export function config(ctx: IPicGo): IPluginConfig[] {
+  const isGui = !!ctx.GUI_VERSION
   const defaultUserConfig: UserConfig = {
     url: '',
     token: '',
@@ -33,12 +34,14 @@ export function config(ctx: IPicGo): IPluginConfig[] {
       get message(): string {
         return ctx.i18n.translate<LocaleKey>('UPLOADER_CONFIG_URL')
       },
-      validate: (input: string): string | true => {
-        if (input.trim() === '') {
-          return ctx.i18n.translate<LocaleKey>('UPLOADER_CONFIG_VALIDATE_URL_EMPTY')
-        }
-        return true
-      },
+      validate: !isGui
+        ? (input: string): string | true => {
+            if (input.trim() === '') {
+              return ctx.i18n.translate<LocaleKey>('UPLOADER_CONFIG_VALIDATE_URL_EMPTY')
+            }
+            return true
+          }
+        : undefined,
     },
     {
       name: 'token',
@@ -48,12 +51,14 @@ export function config(ctx: IPicGo): IPluginConfig[] {
       get message(): string {
         return ctx.i18n.translate<LocaleKey>('UPLOADER_CONFIG_TOKEN')
       },
-      validate: (input: string): string | true => {
-        if (input.trim() === '') {
-          return ctx.i18n.translate<LocaleKey>('UPLOADER_CONFIG_VALIDATE_TOKEN_EMPTY')
-        }
-        return true
-      },
+      validate: !isGui
+        ? (input: string): string | true => {
+            if (input.trim() === '') {
+              return ctx.i18n.translate<LocaleKey>('UPLOADER_CONFIG_VALIDATE_TOKEN_EMPTY')
+            }
+            return true
+          }
+        : undefined,
     },
     {
       name: 'albumId',
@@ -81,7 +86,7 @@ export function config(ctx: IPicGo): IPluginConfig[] {
       get message(): string {
         return ctx.i18n.translate<LocaleKey>('UPLOADER_CONFIG_UNIQUE_IMAGE_SIZE_LIMIT')
       },
-      when: (answer: any) => answer.uniqueImage,
+      when: !isGui ? (answer: any): boolean => answer.uniqueImage : undefined,
     },
   ]
 }
