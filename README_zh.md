@@ -1,5 +1,7 @@
 # picgo-plugin-lychee
 
+[![npm](https://img.shields.io/npm/v/picgo-plugin-lychee?label=NPM&logo=npm)](https://www.npmjs.com/package/picgo-plugin-lychee) [![npm](https://img.shields.io/npm/dm/picgo-plugin-lychee?label=Downloads&logo=npm)](https://www.npmjs.com/package/picgo-plugin-lychee) [![npm](https://img.shields.io/npm/l/picgo-plugin-lychee?label=License&logo=npm)](https://github.com/ttionya/picgo-plugin-lychee/blob/master/LICENSE)
+
 [PicGo](https://github.com/PicGo/PicGo-Core) [Lychee](https://github.com/LycheeOrg/Lychee) 上传插件。
 
 <br>
