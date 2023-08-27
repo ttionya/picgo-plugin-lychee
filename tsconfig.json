@@ -4,6 +4,9 @@
   "compilerOptions": {
     "outDir": "lib",
 
+    // for Node 12
+    "target": "ES2019",
+
     "baseUrl": ".",
     "paths": {
       "types/*": ["types/*"]
