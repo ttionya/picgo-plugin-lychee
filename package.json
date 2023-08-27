@@ -26,7 +26,7 @@
   ],
   "scripts": {
     "bootstrap": "pnpm install",
-    "build": "tsc",
+    "build": "rimraf lib && tsc",
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",
     "prepublishOnly": "pnpm run build"
@@ -41,6 +41,7 @@
     "husky": "^8.0.3",
     "lint-staged": "^14.0.0",
     "picgo": "^1.5.4",
+    "rimraf": "^5.0.1",
     "typescript": "^5.1.6"
   },
   "dependencies": {
