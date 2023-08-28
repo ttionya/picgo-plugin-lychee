@@ -10,6 +10,7 @@
 
 - for GUI: search `lychee` and install
 - for Core: run `picgo add lychee`
+- for Typora: See [here](#for-typora)
 
 <br>
 
@@ -64,6 +65,14 @@ Enabling this option will result in additional requests and hash calculations du
 This setting only takes effect when `uniqueImage` is enabled.
 
 It further prevents excessive system resource usage when calculating hashes for large images. Images larger than this value will no longer be guaranteed to be unique in the album.
+
+<br>
+
+## For Typora
+
+The internally packaged PicGo-Core in Typora uses Node.js `v12.13.0` and PicGo-Core `v1.4.7`. This version is outdated and cannot be compatible with the new APIs required by this tool.
+
+**Please download the latest version of [PicGo-Core](https://github.com/PicGo/PicGo-Core) on your own and use a `custom command` in Typora to specify the use of the latest version of PicGo-Core.**
 
 <br>
 
