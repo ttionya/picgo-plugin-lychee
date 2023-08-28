@@ -10,6 +10,7 @@
 
 - 对于 GUI: 搜索 `lychee` 并安装
 - 对于 Core: 运行 `picgo add lychee`
+- 对于 Typora: 查看[这里](#对于-typora)
 
 <br>
 
@@ -64,6 +65,14 @@ Lychee API token.
 此设置仅在启用 `uniqueImage` 时生效。
 
 它进一步防止在计算大图像的哈希值时过度使用系统资源。大于此值的图像将不再保证在相册中是唯一的。
+
+<br>
+
+## 对于 Typora
+
+Typora 内置的 PicGo-Core 打包了 Node.js `v12.13.0` 和 PicGo-Core `v1.4.7`。该版本已经过时，无法兼容本工具所需的新 API。
+
+请自行下载最新版本的 [PicGo-Core](https://github.com/PicGo/PicGo-Core)，并在 Typora 中使用`自定义命令`来指定使用最新版本的 PicGo-Core。
 
 <br>
 
