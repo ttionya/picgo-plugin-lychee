@@ -35,6 +35,7 @@
     "@ttionya/eslint-config": "^2.5.0",
     "@ttionya/prettier-config": "^1.2.0",
     "@ttionya/tsconfig": "^2.1.0",
+    "@types/inquirer": "^0.0.42",
     "@types/node": "^20.5.7",
     "@typescript-eslint/eslint-plugin": "^6.5.0",
     "@typescript-eslint/parser": "^6.5.0",

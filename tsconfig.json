@@ -10,9 +10,7 @@
     "baseUrl": ".",
     "paths": {
       "types/*": ["types/*"]
-    },
-
-    "skipLibCheck": true
+    }
   },
 
   "include": ["src/**/*", "types/**/*"]
