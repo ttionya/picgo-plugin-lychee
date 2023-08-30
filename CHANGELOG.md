@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.1.0
+
+### Feature
+
+- Add a notification for users with lower versions of PicGo-Core
+
+<br>
+
 ## v1.0.1
 
 ### Feature
