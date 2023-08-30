@@ -1,6 +1,9 @@
 import type { Locale } from 'types/locale'
 
 export const en: Locale = {
+  PLUGIN_VERSION_ERROR:
+    'The current PicGo-Core version is too low. The upload plugin "${pluginName}" requires version v${version} or above to run.',
+
   UPLOADER_CONFIG_URL: 'Lychee Web URL',
   UPLOADER_CONFIG_TOKEN: 'Lychee API Token',
   UPLOADER_CONFIG_ALBUM_ID: 'Album ID',

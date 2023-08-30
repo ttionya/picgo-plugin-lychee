@@ -1,4 +1,6 @@
 export interface Locale {
+  PLUGIN_VERSION_ERROR: string
+
   // uploader config
   UPLOADER_CONFIG_URL: string
   UPLOADER_CONFIG_TOKEN: string

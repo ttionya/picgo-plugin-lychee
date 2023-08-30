@@ -1,6 +1,9 @@
 import type { Locale } from 'types/locale'
 
 export const zhCN: Locale = {
+  PLUGIN_VERSION_ERROR:
+    '当前 PicGo-Core 版本过低，上传插件 "${pluginName}" 需要 v${version} 或以上版本才能运行。',
+
   UPLOADER_CONFIG_URL: 'Lychee 网页地址',
   UPLOADER_CONFIG_TOKEN: 'Lychee API Token',
   UPLOADER_CONFIG_ALBUM_ID: '相册编号',

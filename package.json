@@ -37,6 +37,7 @@
     "@ttionya/tsconfig": "^2.1.0",
     "@types/inquirer": "^0.0.42",
     "@types/node": "^20.5.7",
+    "@types/semver": "^7.5.1",
     "@typescript-eslint/eslint-plugin": "^6.5.0",
     "@typescript-eslint/parser": "^6.5.0",
     "husky": "^8.0.3",
@@ -47,6 +48,8 @@
   },
   "dependencies": {
     "form-data": "^4.0.0",
-    "human-format": "^1.2.0"
+    "human-format": "^1.2.0",
+    "os-locale": "^5.0.0",
+    "semver": "^7.5.4"
   }
 }
