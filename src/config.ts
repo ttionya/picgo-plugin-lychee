@@ -112,7 +112,7 @@ export function formatUserConfig(ctx: IPicGo, userConfig: UserConfig): Formatted
     try {
       // parse human readable size
       uniqueImageSizeLimit = humanFormat.parse(
-        (userConfig.uniqueImageSizeLimit || DEFAULT_UNIQUE_IMAGE_SIZE_LIMIT).toUpperCase(),
+        (`${userConfig.uniqueImageSizeLimit}` || DEFAULT_UNIQUE_IMAGE_SIZE_LIMIT).toUpperCase(),
         { scale: binaryScale }
       )
     } catch (err) {
