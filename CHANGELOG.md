@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.1.1
+
+### Bugfix
+
+- Remove `preinstall` hooks (fixed [#2](https://github.com/ttionya/picgo-plugin-lychee/issues/2))
+
+### Chore
+
+- Update dependencies
+
+<br>
+
 ## v1.1.0
 
 ### Feature
